@@ -18,9 +18,19 @@ file(GLOB CORE_HEADERS include/Core/*.h)
 # Automatically find all source files in src/Core
 file(GLOB CORE_SOURCES src/Core/*.cpp)
 
+# Automatically find all header files in include/Render
+file(GLOB RENDER_HEADERS include/Render/*.h)
+# Automatically find all source files in src/Render
+file(GLOB RENDER_SOURCES src/Render/*.cpp)
+
+# Automatically find all header files in include/Utils
+file(GLOB UTILS_HEADERS include/Utils/*.h)
+# Automatically find all source files in src/Utils
+file(GLOB UTILS_SOURCES src/Utils/*.cpp)
+
 
 # Add main.cpp and the core sources to the executable
-add_executable(FatRayTracer src/main.cpp ${CORE_SOURCES})
+add_executable(FatRayTracer src/main.cpp ${CORE_SOURCES} ${RENDER_SOURCES} ${UTILS_SOURCES})
 
 # Specify the include directories
 target_include_directories(FatRayTracer PRIVATE include)

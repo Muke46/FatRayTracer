@@ -1,4 +1,3 @@
-
 #include "Core/Ray.h"
 #include <stdexcept>
 

@@ -23,11 +23,19 @@ Vector3 Vector3::operator-(const Vector3 &other) const
 }
 
 // Division
-Vector3 Vector3::operator/(float scalar) const {
-    if (scalar == 0.0f) {
+Vector3 Vector3::operator/(float scalar) const
+{
+    if (scalar == 0.0f)
+    {
         throw std::invalid_argument("Division by zero in Vector3.");
     }
     return Vector3(x / scalar, y / scalar, z / scalar);
+}
+
+// Multiplication
+Vector3 Vector3::operator*(float coefficient) const
+{
+    return Vector3(x * coefficient, y * coefficient, z * coefficient);
 }
 
 // Length calculation
@@ -40,4 +48,13 @@ float Vector3::getLength() const
 float Vector3::dot(const Vector3 &other) const
 {
     return x * other.x + y * other.y + z * other.z;
+}
+
+// Cross product
+Vector3 Vector3::cross(const Vector3 &other) const
+{
+    return Vector3(
+        y * other.z - z * other.y,
+        z * other.x - x * other.z,
+        x * other.y - y * other.x);
 }

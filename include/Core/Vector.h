@@ -28,11 +28,17 @@ public:
     // Overload for the division operator
     Vector3 operator/(float scalar) const;
 
+    // Overload for the multiplication operator
+    Vector3 operator*(float coefficient) const;
+
     // Method to calculate the lenght
     float getLength() const;
 
     // Method for the dot product
     float dot(const Vector3 &other) const;
+
+    // Method for the cross product
+    Vector3 cross(const Vector3 &other) const;
 };
 
 #endif // VECTOR_H
