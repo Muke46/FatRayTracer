@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include <vector>
 
 #include <cmath>
@@ -9,45 +10,7 @@
 #include "Render/PixelBuffer.h"
 #include "Utils/Color.h"
 #include "Render/Camera.h"
-
-void triangleRender(PixelBuffer &pixelBuffer, int height, int width, Triangle3 triangle)
-{
-
-    // Initialize the pixel buffer with a gradient
-    for (unsigned int y = 0; y < height; ++y)
-    {
-        for (unsigned int x = 0; x < width; ++x)
-        {
-
-            // Create a ray
-            Vector3 origin = Vector3((float)x, (float)y, 0.0f);
-            Vector3 direction = Vector3(0.0f, 0.0f, 1.0f);
-            Ray3 ray = Ray3(origin, direction);
-
-            Vector3 intersection;
-
-            // Check if the ray intersects with the triangle
-            if (triangle.checkIntersect(ray, intersection) == true)
-            {
-                Color color(
-                    255,
-                    255,
-                    255,
-                    0);
-                pixelBuffer.setPixel(x, y, color);
-            }
-            else
-            {
-                Color color(
-                    0,
-                    0,
-                    0,
-                    0);
-                pixelBuffer.setPixel(x, y, color);
-            }
-        }
-    }
-}
+#include <iostream>
 
 int main()
 {
@@ -59,7 +22,7 @@ int main()
 
     // Pick a font
     sf::Font font;
-    font.loadFromFile("/usr/share/fonts/truetype/freefont/FreeSans.ttf");
+    font.loadFromFile("/home/dennis/Projects/FatRayTracer/assets/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf");
 
     // FPS Counter text element
     sf::Text fpsCounter;
@@ -69,9 +32,9 @@ int main()
 
     // FPS Counter variables
     sf::Clock clock;
-    int framecount = 0; // Used to count the frames between two intervals
+    int framecount = 0;           // Used to count the frames between two intervals
     float updateInterval = 0.01f; // Time between FPS updates
-    float elapsedTime = 0.0f; // Used to count the elapsed time from the last FPS print
+    float elapsedTime = 0.0f;     // Used to count the elapsed time from the last FPS print
 
     // Create a pixel buffer
     PixelBuffer pixelBuffer(width, height);
@@ -89,7 +52,7 @@ int main()
     // Temp color vector
     std::vector<Color> pixels;
     pixels.resize(width * height);
-    
+
     // Create a scene with some triangles
     std::vector<Triangle3> scene;
 
@@ -106,13 +69,18 @@ int main()
     Triangle3 triangle2 = Triangle3(v3, v4, v5);
 
     scene.push_back(triangle2);
-    
+
     // Create a camera
-    Vector3 cameraOrigin = Vector3(5.0f, 5.0f, -10.0f);
+    Vector3 cameraOrigin = Vector3(200.0f, 200.0f, -10.0f);
     Vector3 cameraDirection = Vector3(0.0f, 0.0f, 1.0f);
     Camera3 camera(cameraOrigin, cameraDirection, 15.0f, 20.0f, 20.0f);
 
-    float i = 1.0f;
+    // Camera settings
+    sf::Text CameraText;
+    CameraText.setFont(font);
+    CameraText.setCharacterSize(24);
+    CameraText.setFillColor(sf::Color::Red);
+    CameraText.setPosition(sf::Vector2f(10, height - 24 * 4));
 
     // Main loop
     while (window.isOpen())
@@ -123,20 +91,66 @@ int main()
             {
                 window.close();
             }
+            else if (event.type == sf::Event::KeyPressed) // Check if a key is pressed
+            {
+
+                // Check if 'Control' is held down and 'C' is pressed
+                if (event.key.code == sf::Keyboard::C && event.key.control)
+                {
+                    // Action for when 'Ctrl+C' is pressed
+                    window.close();
+                }
+
+                if (event.key.code == sf::Keyboard::A) 
+                {
+                    camera.origin.x -= 5.0f;
+                }
+                if (event.key.code == sf::Keyboard::D) 
+                {
+                    camera.origin.x += 5.0f;
+                }
+                if (event.key.code == sf::Keyboard::E) 
+                {
+                    camera.origin.y += 5.0f;
+                }
+                if (event.key.code == sf::Keyboard::Q) 
+                {
+                    camera.origin.y -= 5.0f;
+                }
+                if (event.key.code == sf::Keyboard::W) 
+                {
+                    camera.origin.z += 1.0f;
+                }
+                if (event.key.code == sf::Keyboard::S) 
+                {
+                    camera.origin.z -= 1.0f;
+                }
+
+                if (event.key.code == sf::Keyboard::F) 
+                {
+                    camera.focalLength -= 0.1f;
+                    if (camera.focalLength < 0.1f) {
+                        camera.focalLength = 0.1f;
+                    }
+                }
+                if (event.key.code == sf::Keyboard::G) 
+                {
+                    camera.focalLength += 0.1f;
+                }
+
+
+                // You can add other keys in a similar way
+                if (event.key.code == sf::Keyboard::Escape) // Example: check for 'Escape' key
+                {
+                    window.close(); // Close the window when 'Escape' is pressed
+                }
+            }
         }
 
-        camera.setFocalLength(i);
         pixelBuffer.clearBuffer();
         camera.render(pixelBuffer, scene);
 
-        if (i<100.0f) {
-            i = i + 0.1f;
-        }
-        else{
-            i = 1.0f;
-    }
-
-        // Convert the pixel buffer to SFML        
+        // Convert the pixel buffer to SFML
         pixels = pixelBuffer.getPixels(); // Get the colors
 
         for (unsigned int y = 0; y < height; ++y)
@@ -165,12 +179,25 @@ int main()
             elapsedTime = 0.0f;
         }
 
+        // Camera settings
+        char buffer[100];
+        sprintf(buffer, "Camera position: x:%.2f, y:%.2f, z:%.2f\nCamera rotation: x:%.2f, y:%.2f, z:%.2f\nFocal length%.2f",
+                camera.origin.x,
+                camera.origin.y,
+                camera.origin.z,
+                camera.direction.x,
+                camera.direction.y,
+                camera.direction.z,
+                camera.focalLength);
+        CameraText.setString(buffer);
+
         window.clear();
 
         // Create a sprite to draw the texture
         sf::Sprite sprite(texture);
         window.draw(sprite); // Draw the sprite containing the texture
         window.draw(fpsCounter);
+        window.draw(CameraText);
 
         window.display();
     }

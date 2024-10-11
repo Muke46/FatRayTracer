@@ -45,9 +45,6 @@ void Camera3::render(PixelBuffer &pixelBuffer, std::vector<Triangle3> triangles)
     int xResolution = pixelBuffer.getWidth();
     int yResolution = pixelBuffer.getHeight();
 
-    float xStep = width / xResolution;
-    float yStep = height / yResolution;
-
     // For each pixel
     for (unsigned int y = 0; y < yResolution; ++y)
     {
@@ -57,16 +54,24 @@ void Camera3::render(PixelBuffer &pixelBuffer, std::vector<Triangle3> triangles)
             for (size_t i = 0; i < triangles.size(); ++i)
             {
                 // Create a ray
+                Vector3 RayOrigin(
+                    origin.x + x - xResolution / 2,
+                    origin.y + y - yResolution / 2,
+                    origin.z + focalLength);
 
-                Ray3 ray = Ray3(Vector3(x, y, 0.0f), Vector3(0.0f, 0.0f, 1.0f));
+                // Perspective
+                Vector3 RayDirection(
+                    (float) x - xResolution / 2,
+                    (float) y - yResolution / 2,
+                    focalLength);
 
-                // TODO!
+                // Orthogonal
+                // Vector3 RayDirection(
+                //     0.0f,
+                //     0.0f,
+                //     1.0f);
 
-                // Vector3 rayDirection = Vector3(
-                //     xResolution / 2 * xStep - i * xStep - xStep / 2,
-                //     yResolution / 2 * yStep - i * yStep - yStep / 2,
-                //     focalLength);
-                // Ray3 ray = Ray3(Vector3((float) x*xStep, (float) y*yStep, 0.0f), rayDirection);
+                Ray3 ray = Ray3(RayOrigin, RayDirection);
 
                 Vector3 intersection;
 
