@@ -45,16 +45,25 @@ float Vector3::getLength() const
 }
 
 // Dot product
-float Vector3::dot(const Vector3 &other) const
+float dot(const Vector3& v1, const Vector3& v2)
 {
-    return x * other.x + y * other.y + z * other.z;
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
 // Cross product
-Vector3 Vector3::cross(const Vector3 &other) const
+Vector3 cross(const Vector3& v1, const Vector3& v2)
 {
     return Vector3(
-        y * other.z - z * other.y,
-        z * other.x - x * other.z,
-        x * other.y - y * other.x);
+        v1.y * v2.z - v1.z * v2.y,
+        v1.z * v2.x - v1.x * v2.z,
+        v1.x * v2.y - v1.y * v2.x);
+}
+
+Vector3 normalize(const Vector3& v){
+float length = v.getLength();
+    if (length < 1e-6)
+    {
+        throw std::invalid_argument("Ray direction vector cannot be zero.");
+    }
+    return v / length;
 }

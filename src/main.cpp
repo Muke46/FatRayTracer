@@ -7,6 +7,7 @@
 #include "Core/Vector.h"
 #include "Core/Ray.h"
 #include "Core/Triangle.h"
+#include "Core/Sphere.h"
 #include "Render/PixelBuffer.h"
 #include "Utils/Color.h"
 #include "Render/Camera.h"
@@ -53,27 +54,35 @@ int main()
     std::vector<Color> pixels;
     pixels.resize(width * height);
 
-    // Create a scene with some triangles
-    std::vector<Triangle3> scene;
+    // Create a vector to store pointers to SceneObject
+    std::vector<std::shared_ptr<SceneObject>> objects;
 
-    Vector3 v0 = Vector3(100.0f, 100.0f, 10.0f);
-    Vector3 v1 = Vector3(200.0f, 100.0f, 10.0f);
-    Vector3 v2 = Vector3(100.0f, 200.0f, 10.0f);
-    Triangle3 triangle = Triangle3(v0, v1, v2);
+    Vector3 v0 = Vector3(10.0f, 10.0f, 0.0f);
+    Vector3 v1 = Vector3(20.0f, 10.0f, 0.0f);
+    Vector3 v2 = Vector3(10.0f, 20.0f, 0.0f);
+    Triangle3 triangle0 = Triangle3(v1, v0, v2);
+    Triangle3 triangle1 = Triangle3(v0, v1, v2);
 
-    scene.push_back(triangle);
+    // Vector3 v3 = Vector3(250.0f, 100.0f, 10.0f);
+    // Vector3 v4 = Vector3(250.0f, 250.0f, 10.0f);
+    // Vector3 v5 = Vector3(100.0f, 250.0f, 10.0f);
+    // Triangle3 triangle2 = Triangle3(v3, v4, v5);
 
-    Vector3 v3 = Vector3(250.0f, 100.0f, 10.0f);
-    Vector3 v4 = Vector3(250.0f, 250.0f, 10.0f);
-    Vector3 v5 = Vector3(100.0f, 250.0f, 10.0f);
-    Triangle3 triangle2 = Triangle3(v3, v4, v5);
+    // scene.push_back(triangle2);
 
-    scene.push_back(triangle2);
+    Sphere sphere0 = Sphere(Vector3(0.0f, 0.0f, 30.0f) ,10.f);
+    Sphere sphere1 = Sphere(Vector3(-30.0f, 0.0f, 10.0f), 10.0f);
+
+    objects.push_back(std::make_shared<Sphere>(sphere0));
+    objects.push_back(std::make_shared<Sphere>(sphere1));
+    objects.push_back(std::make_shared<Triangle3>(triangle0));
+    objects.push_back(std::make_shared<Triangle3>(triangle1));
+    
 
     // Create a camera
-    Vector3 cameraOrigin = Vector3(200.0f, 200.0f, -10.0f);
+    Vector3 cameraOrigin = Vector3(0.0f, 0.0f, -150.0f);
     Vector3 cameraDirection = Vector3(0.0f, 0.0f, 1.0f);
-    Camera3 camera(cameraOrigin, cameraDirection, 15.0f, 20.0f, 20.0f);
+    Camera3 camera(cameraOrigin, cameraDirection, 15.0f, 10.0f, 10.0f);
 
     // Camera settings
     sf::Text CameraText;
@@ -82,6 +91,9 @@ int main()
     CameraText.setFillColor(sf::Color::Red);
     CameraText.setPosition(sf::Vector2f(10, height - 24 * 4));
 
+
+int iterations = 0;
+int iterationsLimit = 100;
     // Main loop
     while (window.isOpen())
     {
@@ -100,6 +112,9 @@ int main()
                     // Action for when 'Ctrl+C' is pressed
                     window.close();
                 }
+
+                pixelBuffer.clearBuffer();
+                iterations = 0;
 
                 if (event.key.code == sf::Keyboard::A) 
                 {
@@ -147,8 +162,14 @@ int main()
             }
         }
 
-        pixelBuffer.clearBuffer();
-        camera.render(pixelBuffer, scene);
+        // pixelBuffer.clearBuffer();
+        if (iterations < iterationsLimit) {
+        camera.render(pixelBuffer, objects);
+        iterations++;
+        }
+        if (iterations == iterationsLimit - 1){
+            std::cout << "Done" << std::endl;
+        }
 
         // Convert the pixel buffer to SFML
         pixels = pixelBuffer.getPixels(); // Get the colors

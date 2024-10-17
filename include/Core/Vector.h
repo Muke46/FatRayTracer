@@ -33,12 +33,14 @@ public:
 
     // Method to calculate the lenght
     float getLength() const;
-
-    // Method for the dot product
-    float dot(const Vector3 &other) const;
-
-    // Method for the cross product
-    Vector3 cross(const Vector3 &other) const;
 };
+
+// Funciton for the dot product
+float dot(const Vector3& v1, const Vector3& v2);
+
+// Function for the cross product
+Vector3 cross(const Vector3& v1, const Vector3& v2);
+
+Vector3 normalize(const Vector3& v1);
 
 #endif // VECTOR_H

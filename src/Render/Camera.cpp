@@ -1,5 +1,6 @@
 #include "Render/Camera.h"
 #include <cstdio>
+#include <memory>
 
 // Constructor
 Camera3::Camera3(Vector3 origin_, Vector3 direction_, float focalLength_, float width_, float height_)
@@ -9,83 +10,69 @@ Camera3::Camera3(Vector3 origin_, Vector3 direction_, float focalLength_, float 
       width(width_),
       height(height_) {}
 
-// Focal length
-float Camera3::getFocalLength()
-{
-    return focalLength;
-}
-void Camera3::setFocalLength(float focalLength_)
-{
-    focalLength = focalLength_;
-}
-
-// Width
-float Camera3::getWidth()
-{
-    return width;
-}
-void Camera3::setWidth(float width_)
-{
-    width = width_;
-}
-
-// Height
-float Camera3::getHeight()
-{
-    return height;
-}
-void Camera3::setHeight(float height_)
-{
-    height = height_;
-}
-
 // Render
-void Camera3::render(PixelBuffer &pixelBuffer, std::vector<Triangle3> triangles)
+void Camera3::render(PixelBuffer &pixelBuffer, std::vector<std::shared_ptr<SceneObject>> &objects)
 {
     int xResolution = pixelBuffer.getWidth();
+    float xStep = width / xResolution;
     int yResolution = pixelBuffer.getHeight();
+    float yStep = height / yResolution;
 
     // For each pixel
     for (unsigned int y = 0; y < yResolution; ++y)
     {
         for (unsigned int x = 0; x < xResolution; ++x)
         {
-            // Loop through all the triangles
-            for (size_t i = 0; i < triangles.size(); ++i)
+            // Create the first ray
+
+            // Perspective
+            Vector3 RayDirection(
+                (float)x * xStep - xStep * xResolution / 2,
+                (float)y * yStep - yStep * yResolution / 2,
+                focalLength);
+
+            // Orthogonal
+            // Vector3 RayDirection(
+            //     0.0f,
+            //     0.0f,
+            //     1.0f);
+
+            Vector3 RayOrigin = origin;
+            Ray3 ray = Ray3(RayOrigin, normalize(RayDirection));
+
+            Ray3 reflection;
+
+            int maxReflections = 5;
+
+            int color = 0;
+
+            for (int i = 0; i < maxReflections; i++)
             {
-                // Create a ray
-                Vector3 RayOrigin(
-                    origin.x + x - xResolution / 2,
-                    origin.y + y - yResolution / 2,
-                    origin.z + focalLength);
 
-                // Perspective
-                Vector3 RayDirection(
-                    (float) x - xResolution / 2,
-                    (float) y - yResolution / 2,
-                    focalLength);
+                bool hit = false;
 
-                // Orthogonal
-                // Vector3 RayDirection(
-                //     0.0f,
-                //     0.0f,
-                //     1.0f);
-
-                Ray3 ray = Ray3(RayOrigin, RayDirection);
-
-                Vector3 intersection;
-
-                // Check if the ray intersects with the triangle
-                if (triangles[i].checkIntersect(ray, intersection) == true)
+                // Loop through all the object
+                for (size_t j = 0; j < objects.size(); j++)
                 {
-                    Color color(
-                        255,
-                        255,
-                        255,
-                        0);
-                    pixelBuffer.setPixel(x, y, color);
+
+                    if (objects[j]->Intersect(ray, reflection) == true)
+                    {
+                        ray = reflection;
+                        if (j>1) color = color + 10;
+                        else color = color + 1;
+                        hit = true;
+                    }
                 }
+                if (hit == false) break;
             }
+
+            Color c(
+                color,
+                color,
+                color,
+                0);
+            Color co = pixelBuffer.getPixels()[y * pixelBuffer.width + x];
+            pixelBuffer.setPixel(x, y, co + c);
         }
     }
 }

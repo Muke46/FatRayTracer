@@ -11,6 +11,8 @@ class Color {
 
         // Parametric constructor
         Color(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+
+        Color operator+(const Color& other) const;
         
 };
 

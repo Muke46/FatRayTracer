@@ -2,9 +2,10 @@
 #define CAMERA_H
 
 #include "Core/Vector.h"
-#include "Core/Triangle.h"
+#include "Core/Sphere.h"
 #include "Render/PixelBuffer.h"
 #include "Utils/Color.h"
+#include <memory>
 
 class Camera3
 {
@@ -22,19 +23,7 @@ class Camera3
         // Constructor
         Camera3(Vector3 origin_, Vector3 direction_, float focalLength_, float width_, float height_);
 
-        // Focal length
-        float getFocalLength();
-        void setFocalLength(float focalLength_);
-
-        // get/set width
-        float getWidth();
-        void setWidth(float width_);
-
-        // get/set height
-        float getHeight();
-        void setHeight(float height_);
-
-        void render(PixelBuffer &pixelBuffer, std::vector<Triangle3> triangles);
+        void render(PixelBuffer &pixelBuffer, std::vector<std::shared_ptr<SceneObject>>& objects);
 };
 
 #endif // CAMERA_H

@@ -1,10 +1,11 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
+#include "Core/SceneObject.h"
 #include "Core/Vector.h"
 #include "Core/Ray.h"
 
-class Triangle3
+class Triangle3 : public SceneObject
 {
 
 public:
@@ -18,8 +19,8 @@ public:
     // Declaration of the constructor
     Triangle3(Vector3 v0_, Vector3 v1_, Vector3 v2_);
 
-    // Checks if a ray intersects with the triangle
-    bool checkIntersect(const Ray3& incomingVector, Vector3& intersectionPoint) const;
+    bool Intersect(const Ray3& ray, Ray3& reflection) const override;
+
 
 };
 

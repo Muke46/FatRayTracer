@@ -6,6 +6,8 @@
 class Ray3
 {
     public:
+    
+    Vector3 origin, direction;
 
     // Default constructor
     Ray3();
@@ -13,16 +15,7 @@ class Ray3
     // Parametric constructor
     Ray3(Vector3 origin_, Vector3 direction_);
 
-    Vector3 getOrigin() const;
-    Vector3 getDirection() const;
-
-    void setOrigin(const Vector3& origin);
-    void setDirection(const Vector3& direction);
-
-    private:
-    
-    // The direction should be normalized
-    Vector3 m_origin, m_direction;
+    void setDirection(const Vector3& direction_);
 
 };
 
