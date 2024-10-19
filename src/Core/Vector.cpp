@@ -67,3 +67,16 @@ float length = v.getLength();
     }
     return v / length;
 }
+
+Vector3 getRandomDirection(){
+    
+    float randomx = ((float)rand() / (float)RAND_MAX) * 2.0f - 1.0f;
+    float randomy = ((float)rand() / (float)RAND_MAX) * 2.0f - 1.0f;
+    float randomz = ((float)rand() / (float)RAND_MAX) * 2.0f - 1.0f;
+
+    return normalize(Vector3(randomx, randomy, randomz));
+
+    // Alternative (and better) methods from Sebastian Lague
+    // https://stackoverflow.com/questions/5825680
+    // https://math.stackexchange.com/a/1585996
+}

@@ -13,12 +13,16 @@ class SceneObject {
     Color color = Color();
 
     float emissivity = 0.0f;
+
+    float roughness = 0.0f;
     
     // Checks if a ray intersects with the triangle (Abstract method)
     virtual bool Intersect(const Ray3& ray, Ray3& reflection) const = 0;
 
     // Destructor
     //virtual ~SceneObject(); //TODO
+
+    // Color ReflectedColor(Ray3& ray);
 
     protected:
     // Mersenne Twister random number generator

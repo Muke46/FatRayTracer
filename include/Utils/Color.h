@@ -12,8 +12,16 @@ class Color {
         // Parametric constructor
         Color(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
 
+        Color(int red, int green, int blue, int alpha);
+
         Color operator+(const Color& other) const;
+
+        Color operator*(const Color& other) const;
         
 };
+
+Color averageColors(const Color& color0, const Color& color1);
+
+// Color randomColor(); TODO
 
 #endif // COLOR_H

@@ -2,6 +2,7 @@
 #define VECTOR_H
 
 #include <cmath>
+#include <random>
 
 class Vector3
 {
@@ -42,5 +43,7 @@ float dot(const Vector3& v1, const Vector3& v2);
 Vector3 cross(const Vector3& v1, const Vector3& v2);
 
 Vector3 normalize(const Vector3& v1);
+
+Vector3 getRandomDirection();
 
 #endif // VECTOR_H

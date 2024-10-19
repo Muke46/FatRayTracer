@@ -1,4 +1,5 @@
 #include "Render/Camera.h"
+#include "Utils/Color.h"
 #include <cstdio>
 #include <memory>
 
@@ -17,6 +18,10 @@ void Camera3::render(PixelBuffer &pixelBuffer, std::vector<std::shared_ptr<Scene
     float xStep = width / xResolution;
     int yResolution = pixelBuffer.getHeight();
     float yStep = height / yResolution;
+
+    std::vector<Color> pixels;
+    pixels.resize(width * height);
+    pixels = pixelBuffer.getPixels(); // Get the colors
 
     // For each pixel
     for (unsigned int y = 0; y < yResolution; ++y)
@@ -42,14 +47,20 @@ void Camera3::render(PixelBuffer &pixelBuffer, std::vector<std::shared_ptr<Scene
 
             Ray3 reflection;
 
-            int maxReflections = 5;
+            int maxReflections = 10;
 
-            int color = 0;
+            // A ray is considered done when a light is hit or no objects have been hit
+            bool hit;
+            bool lightHit = false;
+            float minDistance = std::numeric_limits<float>::max(); //max max super max?
+            Ray3 closestObjectReflection;
+            int closestObjectIndex = 0;
+
+            // TODO add distance checking so the objects are not rendered out of order
 
             for (int i = 0; i < maxReflections; i++)
             {
-
-                bool hit = false;
+                hit = false;
 
                 // Loop through all the object
                 for (size_t j = 0; j < objects.size(); j++)
@@ -57,22 +68,26 @@ void Camera3::render(PixelBuffer &pixelBuffer, std::vector<std::shared_ptr<Scene
 
                     if (objects[j]->Intersect(ray, reflection) == true)
                     {
-                        ray = reflection;
-                        if (j>1) color = color + 10;
-                        else color = color + 1;
+                        float distance = (reflection.origin - ray.origin).getLength();
+                        if (distance < minDistance){
+                            minDistance = distance;
+                            closestObjectReflection = reflection;
+                            closestObjectIndex = j;
+                        }
                         hit = true;
                     }
                 }
-                if (hit == false) break;
+                if (hit) {
+                    ray = closestObjectReflection;
+                    if (objects[closestObjectIndex]->emissivity > 0.0f) {
+                        lightHit = true;
+                        break;
+                    }
+                }
             }
-
-            Color c(
-                color,
-                color,
-                color,
-                0);
-            Color co = pixelBuffer.getPixels()[y * pixelBuffer.width + x];
-            pixelBuffer.setPixel(x, y, co + c);
+            if (lightHit == true){
+            pixelBuffer.setPixel(x, y, ray.color);
+            }
         }
     }
 }
