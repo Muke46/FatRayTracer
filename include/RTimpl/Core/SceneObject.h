@@ -1,9 +1,8 @@
 #ifndef SCENEOBJECT_H
 #define SCENEOBJECT_H
 
-#include "Core/Vector.h"
-#include "Core/Ray.h"
-#include "Utils/Color.h"
+#include "RTimpl/Core/Ray.h"
+#include "RTimpl/Utils/Color.h"
 #include <random>
 
 class SceneObject {

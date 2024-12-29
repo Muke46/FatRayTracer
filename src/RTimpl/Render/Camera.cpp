@@ -1,7 +1,10 @@
-#include "Render/Camera.h"
-#include "Utils/Color.h"
+#include "RTimpl/Render/Camera.h"
+#include "RTimpl/Utils/Color.h"
 #include <cstdio>
 #include <memory>
+#include <RTimpl/Core/Vector.h>
+#include <RTimpl/Core/SceneObject.h>
+#include <RTimpl/Render/PixelBuffer.h>
 
 // Constructor
 Camera3::Camera3(Vector3 origin_, Vector3 direction_, float focalLength_, float width_, float height_)
@@ -68,8 +71,7 @@ void Camera3::render(PixelBuffer &pixelBuffer, std::vector<std::shared_ptr<Scene
 
                     if (objects[j]->Intersect(ray, reflection) == true)
                     {
-                        float distance = (reflection.origin - ray.origin).getLength();
-                        if (distance < minDistance){
+                        if (float distance = (reflection.origin - ray.origin).getLength(); distance < minDistance){
                             minDistance = distance;
                             closestObjectReflection = reflection;
                             closestObjectIndex = j;

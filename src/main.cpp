@@ -1,20 +1,19 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <vector>
 
+#include <vector>
 #include <cmath>
 
-#include "Core/Vector.h"
-#include "Core/Ray.h"
-#include "Core/Triangle.h"
-#include "Core/Sphere.h"
-#include "Render/PixelBuffer.h"
-#include "Utils/Color.h"
-#include "Render/Camera.h"
+#include "RTimpl/Core/Vector.h"
+#include "RTimpl/Core/SceneObject.h"
+#include "RTimpl/Core/Triangle.h"
+#include "RTimpl/Core/Sphere.h"
+#include "RTimpl/Render/PixelBuffer.h"
+#include "RTimpl/Utils/Color.h"
+#include "RTimpl/Render/Camera.h"
 #include <iostream>
 
-int main()
-{
+int main() {
     const unsigned int width = 800;
     const unsigned int height = 600;
 
@@ -23,7 +22,7 @@ int main()
 
     // Pick a font
     sf::Font font;
-    font.loadFromFile("/home/dennis/Projects/FatRayTracer/assets/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf");
+    font.loadFromFile("./assets/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf");
 
     // FPS Counter text element
     sf::Text fpsCounter;
@@ -33,9 +32,9 @@ int main()
 
     // FPS Counter variables
     sf::Clock clock;
-    int framecount = 0;           // Used to count the frames between two intervals
+    int framecount = 0; // Used to count the frames between two intervals
     float updateInterval = 0.01f; // Time between FPS updates
-    float elapsedTime = 0.0f;     // Used to count the elapsed time from the last FPS print
+    float elapsedTime = 0.0f; // Used to count the elapsed time from the last FPS print
 
     // Create a pixel buffer
     PixelBuffer pixelBuffer(width, height);
@@ -55,7 +54,7 @@ int main()
     pixels.resize(width * height);
 
     // Create a vector to store pointers to SceneObject
-    std::vector<std::shared_ptr<SceneObject>> objects;
+    std::vector<std::shared_ptr<SceneObject> > objects;
 
     Sphere sphere0 = Sphere(Vector3(0.0f, 0.0f, 30.0f), 50.f);
     sphere0.color = Color(160, 160, 160, 0);
@@ -167,20 +166,14 @@ int main()
     bool averaging = true;
 
     // Main loop
-    while (window.isOpen())
-    {
-        for (auto event = sf::Event{}; window.pollEvent(event);)
-        {
-            if (event.type == sf::Event::Closed)
-            {
+    while (window.isOpen()) {
+        for (auto event = sf::Event{}; window.pollEvent(event);) {
+            if (event.type == sf::Event::Closed) {
                 window.close();
-            }
-            else if (event.type == sf::Event::KeyPressed) // Check if a key is pressed
+            } else if (event.type == sf::Event::KeyPressed) // Check if a key is pressed
             {
-
                 // Check if 'Control' is held down and 'C' is pressed
-                if (event.key.code == sf::Keyboard::C && event.key.control)
-                {
+                if (event.key.code == sf::Keyboard::C && event.key.control) {
                     // Action for when 'Ctrl+C' is pressed
                     window.close();
                 }
@@ -188,41 +181,32 @@ int main()
                 pixelBuffer.clearBuffer();
                 iterations = 0;
 
-                if (event.key.code == sf::Keyboard::A)
-                {
+                if (event.key.code == sf::Keyboard::A) {
                     camera.origin.x -= 5.0f;
                 }
-                if (event.key.code == sf::Keyboard::D)
-                {
+                if (event.key.code == sf::Keyboard::D) {
                     camera.origin.x += 5.0f;
                 }
-                if (event.key.code == sf::Keyboard::E)
-                {
+                if (event.key.code == sf::Keyboard::E) {
                     camera.origin.y += 5.0f;
                 }
-                if (event.key.code == sf::Keyboard::Q)
-                {
+                if (event.key.code == sf::Keyboard::Q) {
                     camera.origin.y -= 5.0f;
                 }
-                if (event.key.code == sf::Keyboard::W)
-                {
+                if (event.key.code == sf::Keyboard::W) {
                     camera.origin.z += 1.0f;
                 }
-                if (event.key.code == sf::Keyboard::S)
-                {
+                if (event.key.code == sf::Keyboard::S) {
                     camera.origin.z -= 1.0f;
                 }
 
-                if (event.key.code == sf::Keyboard::F)
-                {
+                if (event.key.code == sf::Keyboard::F) {
                     camera.focalLength -= 0.1f;
-                    if (camera.focalLength < 0.1f)
-                    {
+                    if (camera.focalLength < 0.1f) {
                         camera.focalLength = 0.1f;
                     }
                 }
-                if (event.key.code == sf::Keyboard::G)
-                {
+                if (event.key.code == sf::Keyboard::G) {
                     camera.focalLength += 0.1f;
                 }
 
@@ -235,34 +219,29 @@ int main()
         }
 
         // pixelBuffer.clearBuffer();
-        if (iterations < iterationsLimit)
-        {
+        if (iterations < iterationsLimit) {
             camera.render(pixelBuffer, objects);
             iterations++;
         }
-        if (iterations == iterationsLimit - 1)
-        {
+        if (iterations == iterationsLimit - 1) {
             std::cout << "Done" << std::endl;
         }
 
         // Convert the pixel buffer to SFML
         pixels = pixelBuffer.getPixels(); // Get the colors
 
-        for (unsigned int y = 0; y < height; ++y)
-        {
-            for (unsigned int x = 0; x < width; ++x)
-            {
+        for (unsigned int y = 0; y < height; ++y) {
+            for (unsigned int x = 0; x < width; ++x) {
                 // Create a sf::Color object with the render output, and assign it to pixels_sfml
 
                 Color tmp;
 
                 if (averaging) {
-                sf::Color oldColor_sfml = pixels_sfml[y * width + x];
-                Color oldColor = Color(oldColor_sfml.r, oldColor_sfml.g, oldColor_sfml.b, oldColor_sfml.a);
-                tmp = averageColors(pixels[y * width + x], oldColor);
-                }
-                else{
-                tmp = pixels[y * width + x];
+                    sf::Color oldColor_sfml = pixels_sfml[y * width + x];
+                    Color oldColor = Color(oldColor_sfml.r, oldColor_sfml.g, oldColor_sfml.b, oldColor_sfml.a);
+                    tmp = averageColors(pixels[y * width + x], oldColor);
+                } else {
+                    tmp = pixels[y * width + x];
                 }
 
                 pixels_sfml[y * width + x] = sf::Color(tmp.r, tmp.g, tmp.b);
@@ -276,10 +255,10 @@ int main()
         framecount++;
         elapsedTime += clock.restart().asSeconds();
 
-        if (elapsedTime >= updateInterval)
-        {
+        if (elapsedTime >= updateInterval) {
             char buffer[10];
-            snprintf(buffer, sizeof(buffer), "%.2f", framecount / updateInterval); // Format FPS with 2 decimal places                framecount = 0;
+            snprintf(buffer, sizeof(buffer), "%.2f", framecount / updateInterval);
+            // Format FPS with 2 decimal places                framecount = 0;
             fpsCounter.setString(buffer);
             framecount = 0;
             elapsedTime = 0.0f;
@@ -287,7 +266,8 @@ int main()
 
         // Camera settings
         char buffer[100];
-        sprintf(buffer, "Camera position: x:%.2f, y:%.2f, z:%.2f\nCamera rotation: x:%.2f, y:%.2f, z:%.2f\nFocal length%.2f",
+        sprintf(buffer,
+                "Camera position: x:%.2f, y:%.2f, z:%.2f\nCamera rotation: x:%.2f, y:%.2f, z:%.2f\nFocal length%.2f",
                 camera.origin.x,
                 camera.origin.y,
                 camera.origin.z,

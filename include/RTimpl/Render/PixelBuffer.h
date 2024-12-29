@@ -2,7 +2,7 @@
 #define PixelBuffer_H
 
 #include <vector>
-#include "Utils/Color.h"
+#include "RTimpl/Utils/Color.h"
 
 class PixelBuffer
 {
@@ -12,12 +12,12 @@ public:
     // Constructor
     PixelBuffer(unsigned int width_, unsigned int height_);
 
-    // Get dimenstions
-    unsigned int getWidth() const;
-    unsigned int getHeight() const;
+    // Get dimensions
+    [[nodiscard]] unsigned int getWidth() const;
+    [[nodiscard]] unsigned int getHeight() const;
 
     // Get pixels
-    const std::vector<Color> &getPixels() const;
+    [[nodiscard]] const std::vector<Color> &getPixels() const;
 
     // Set pixel
     void setPixel(unsigned int x, unsigned int y, Color color);

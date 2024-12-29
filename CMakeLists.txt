@@ -14,19 +14,19 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 # Automatically find all header files in include/Core
-file(GLOB CORE_HEADERS include/Core/*.h)
+file(GLOB CORE_HEADERS include/RTimpl/Core/*.h)
 # Automatically find all source files in src/Core
-file(GLOB CORE_SOURCES src/Core/*.cpp)
+file(GLOB CORE_SOURCES src/RTimpl/Core/*.cpp)
 
 # Automatically find all header files in include/Render
-file(GLOB RENDER_HEADERS include/Render/*.h)
+file(GLOB RENDER_HEADERS include/RTimpl/Render/*.h)
 # Automatically find all source files in src/Render
-file(GLOB RENDER_SOURCES src/Render/*.cpp)
+file(GLOB RENDER_SOURCES src/RTimpl/Render/*.cpp)
 
 # Automatically find all header files in include/Utils
-file(GLOB UTILS_HEADERS include/Utils/*.h)
+file(GLOB UTILS_HEADERS include/RTimpl/Utils/*.h)
 # Automatically find all source files in src/Utils
-file(GLOB UTILS_SOURCES src/Utils/*.cpp)
+file(GLOB UTILS_SOURCES src/RTimpl/Utils/*.cpp)
 
 
 # Add main.cpp and the core sources to the executable

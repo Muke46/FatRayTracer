@@ -1,5 +1,5 @@
-#include "Core/Sphere.h"
-#include "Core/Ray.h"
+#include "RTimpl/Core/Sphere.h"
+#include "RTimpl/Core/Ray.h"
 
 #include <stdexcept>
 
@@ -8,8 +8,7 @@ Sphere::Sphere(Vector3 Origin_, float radius_)
     : Origin(Origin_), radius(radius_) { emissivity = 0.0f; }
 
 // Check intersection
-bool Sphere::Intersect(const Ray3 &ray, Ray3 &reflection) const
-{
+bool Sphere::Intersect(const Ray3 &ray, Ray3 &reflection) const {
     // Calculate the vector from the ray origin to the sphere center
     Vector3 L = Origin - ray.origin; // Sphere's center - Ray's origin
 
@@ -37,16 +36,11 @@ bool Sphere::Intersect(const Ray3 &ray, Ray3 &reflection) const
 
     // Choose the closest positive intersection point
     Vector3 intersection = Vector3();
-    if (t1 > 0)
-    {
+    if (t1 > 0) {
         intersection = ray.origin + ray.direction * t1; // First intersection point
-    }
-    else if (t2 > 0)
-    {
+    } else if (t2 > 0) {
         intersection = ray.origin + ray.direction * t2; // Second intersection point
-    }
-    else
-    {
+    } else {
         return false; // Both intersections are behind
     }
 
@@ -61,8 +55,7 @@ bool Sphere::Intersect(const Ray3 &ray, Ray3 &reflection) const
     direction = direction + randomDirection;
 
     // // If the dot product between the random vector and the normal is negative, flip it so it points outwards
-    if (dot(normal, direction) < 0)
-    {
+    if (dot(normal, direction) < 0) {
         direction = direction * -1;
     }
 

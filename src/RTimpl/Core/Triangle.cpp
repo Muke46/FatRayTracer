@@ -1,6 +1,6 @@
-#include "Core/Vector.h"
-#include "Core/Triangle.h"
-#include "Core/Ray.h"
+#include "RTimpl/Core/Vector.h"
+#include "RTimpl/Core/Triangle.h"
+#include "RTimpl/Core/Ray.h"
 #include <stdexcept>
 #include <random>
 

@@ -1,4 +1,4 @@
-#include "Core/Ray.h"
+#include "RTimpl/Core/Ray.h"
 #include <stdexcept>
 
 // Default constructor
@@ -10,12 +10,11 @@ Ray3::Ray3()
 
 // Parameterized constructor
 Ray3::Ray3(Vector3 origin_, Vector3 direction_)
-    : origin(origin_)
-{
+    : origin(origin_) {
     // Ensure the direction is normalized
     direction = normalize(direction_);
 }
 
-void Ray3::setDirection(const Vector3& direction_) {
+void Ray3::setDirection(const Vector3 &direction_) {
     direction = normalize(direction_);
 }

@@ -1,4 +1,3 @@
-
 #include "Utils/Color.h"
 
 // Default constructor initialize a black color
