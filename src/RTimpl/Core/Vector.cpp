@@ -1,4 +1,8 @@
 #include "RTimpl/Core/Vector.h"
+
+#include <algorithm>
+#include <chrono>
+#include <random>
 #include <stdexcept>
 
 // Default constructor that initializes a vector with all zeroes
@@ -58,8 +62,8 @@ Vector3 cross(const Vector3& v1, const Vector3& v2)
         v1.x * v2.y - v1.y * v2.x);
 }
 
-Vector3 normalize(const Vector3& v){
-float length = v.getLength();
+Vector3 normalize(const Vector3& v) {
+    const float length = v.getLength();
     if (length < 1e-6)
     {
         throw std::invalid_argument("Ray direction vector cannot be zero.");
@@ -68,14 +72,19 @@ float length = v.getLength();
 }
 
 Vector3 getRandomDirection(){
-    
-    float randomx = ((float)rand() / (float)RAND_MAX) * 2.0f - 1.0f;
-    float randomy = ((float)rand() / (float)RAND_MAX) * 2.0f - 1.0f;
-    float randomz = ((float)rand() / (float)RAND_MAX) * 2.0f - 1.0f;
+
+
+    unsigned const int seed = std::chrono::system_clock::now().time_since_epoch().count();
+    static std::mt19937_64 generator{seed};
+    std::uniform_real_distribution dist{0.f, 1.f};
+
+    const float randomx = dist(generator) * 2.0f - 1.0f;
+    const float randomy = dist(generator) * 2.0f - 1.0f;
+    const float randomz = dist(generator) * 2.0f - 1.0f;
 
     return normalize(Vector3(randomx, randomy, randomz));
 
-    // Alternative (and better) methods from Sebastian Lague
+    // Alternative (and better) methods from Sebastian League
     // https://stackoverflow.com/questions/5825680
     // https://math.stackexchange.com/a/1585996
 }

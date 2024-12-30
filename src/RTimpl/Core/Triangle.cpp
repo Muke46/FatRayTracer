@@ -1,8 +1,6 @@
-#include "RTimpl/Core/Vector.h"
-#include "RTimpl/Core/Triangle.h"
-#include "RTimpl/Core/Ray.h"
-#include <stdexcept>
-#include <random>
+#include <RTimpl/Core/Vector.h>
+#include <RTimpl/Core/Triangle.h>
+#include <RTimpl/Core/Ray.h>
 
 // Constructor
 Triangle3::Triangle3(Vector3 v0_, Vector3 v1_, Vector3 v2_)

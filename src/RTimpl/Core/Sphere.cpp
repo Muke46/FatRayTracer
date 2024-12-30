@@ -1,5 +1,5 @@
-#include "RTimpl/Core/Sphere.h"
-#include "RTimpl/Core/Ray.h"
+#include <RTimpl/Core/Sphere.h>
+#include <RTimpl/Core/Ray.h>
 
 #include <stdexcept>
 

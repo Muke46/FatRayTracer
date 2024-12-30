@@ -1,8 +1,8 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include "Vector.h"
-#include "RTimpl/Utils/Color.h"
+#include "RTimpl/Core/Vector.h"
+#include "Utils/Color.h"
 
 class Ray3 {
 public:

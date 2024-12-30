@@ -2,7 +2,7 @@
 #define SCENEOBJECT_H
 
 #include "RTimpl/Core/Ray.h"
-#include "RTimpl/Utils/Color.h"
+#include "Utils/Color.h"
 #include <random>
 
 class SceneObject {

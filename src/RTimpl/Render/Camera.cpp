@@ -1,10 +1,10 @@
-#include "RTimpl/Render/Camera.h"
-#include "RTimpl/Utils/Color.h"
 #include <cstdio>
 #include <memory>
 #include <RTimpl/Core/Vector.h>
 #include <RTimpl/Core/SceneObject.h>
 #include <RTimpl/Render/PixelBuffer.h>
+#include <RTimpl/Render/Camera.h>
+#include <Utils/Color.h>
 
 // Constructor
 Camera3::Camera3(Vector3 origin_, Vector3 direction_, float focalLength_, float width_, float height_)
@@ -17,10 +17,10 @@ Camera3::Camera3(Vector3 origin_, Vector3 direction_, float focalLength_, float 
 // Render
 void Camera3::render(PixelBuffer &pixelBuffer, std::vector<std::shared_ptr<SceneObject>> &objects)
 {
-    int xResolution = pixelBuffer.getWidth();
-    float xStep = width / xResolution;
-    int yResolution = pixelBuffer.getHeight();
-    float yStep = height / yResolution;
+    const int xResolution = pixelBuffer.getWidth();
+    const float xStep = width / xResolution;
+    const int yResolution = pixelBuffer.getHeight();
+    const float yStep = height / yResolution;
 
     std::vector<Color> pixels;
     pixels.resize(width * height);

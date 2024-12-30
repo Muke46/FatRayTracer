@@ -1,10 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "RTimpl/Core/Vector.h"
-#include "RTimpl/Core/Sphere.h"
-#include "RTimpl/Render/PixelBuffer.h"
-#include "RTimpl/Utils/Color.h"
+#include <RTimpl/Core/Vector.h>
+#include <RTimpl/Core/Sphere.h>
+#include <RTimpl/Render/PixelBuffer.h>
 #include <memory>
 
 class Camera3 {
@@ -21,7 +20,7 @@ public:
     // Constructor
     Camera3(Vector3 origin_, Vector3 direction_, float focalLength_, float width_, float height_);
 
-    void render(PixelBuffer &pixelBuffer, std::vector<std::shared_ptr<SceneObject> > &objects);
+    void render(PixelBuffer &pixelBuffer, std::vector<std::shared_ptr<SceneObject>> &objects);
 };
 
 #endif // CAMERA_H

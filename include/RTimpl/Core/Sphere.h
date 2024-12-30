@@ -1,9 +1,9 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "RTimpl/Core/SceneObject.h"
-#include "RTimpl/Core/Vector.h"
-#include "RTimpl/Core/Ray.h"
+#include <RTimpl/Core/SceneObject.h>
+#include <RTimpl/Core/Vector.h>
+#include <RTimpl/Core/Ray.h>
 
 class Sphere : public SceneObject {
 public:

@@ -2,7 +2,7 @@
 #define PixelBuffer_H
 
 #include <vector>
-#include "RTimpl/Utils/Color.h"
+#include <Utils/Color.h>
 
 class PixelBuffer
 {

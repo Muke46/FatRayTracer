@@ -15,29 +15,33 @@ FetchContent_MakeAvailable(SFML)
 
 # Automatically find all header files in include/Core
 file(GLOB CORE_HEADERS include/RTimpl/Core/*.h)
+file(GLOB RS_CORE_HEADERS include/RSimpl/Core/*.h)
 # Automatically find all source files in src/Core
 file(GLOB CORE_SOURCES src/RTimpl/Core/*.cpp)
+file(GLOB RS_CORE_SOURCES src/RSimpl/Core/*.cpp)
 
 # Automatically find all header files in include/Render
 file(GLOB RENDER_HEADERS include/RTimpl/Render/*.h)
+file(GLOB RS_RENDER_HEADERS include/RSimpl/Render/*.h)
 # Automatically find all source files in src/Render
 file(GLOB RENDER_SOURCES src/RTimpl/Render/*.cpp)
+file(GLOB RS_RENDER_SOURCES src/RSimpl/Render/*.cpp)
 
 # Automatically find all header files in include/Utils
-file(GLOB UTILS_HEADERS include/RTimpl/Utils/*.h)
+file(GLOB UTILS_HEADERS include/Utils/*.h)
 # Automatically find all source files in src/Utils
-file(GLOB UTILS_SOURCES src/RTimpl/Utils/*.cpp)
+file(GLOB UTILS_SOURCES src/Utils/*.cpp)
+
 
 
 # Add main.cpp and the core sources to the executable
-add_executable(FatRayTracer src/main.cpp ${CORE_SOURCES} ${RENDER_SOURCES} ${UTILS_SOURCES})
-
+add_executable(FatRayTracer src/main.cpp ${CORE_SOURCES} ${RENDER_SOURCES} ${UTILS_SOURCES} ${RS_CORE_SOURCES} ${RS_RENDER_SOURCES})
 # Specify the include directories
 target_include_directories(FatRayTracer PRIVATE include)
 
 target_link_libraries(FatRayTracer PRIVATE sfml-graphics)
 target_compile_features(FatRayTracer PRIVATE cxx_std_17)
-
+target_compile_options(FatRayTracer PRIVATE -O3)
 if(WIN32)
     add_custom_command(
         TARGET FatRayTracer

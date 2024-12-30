@@ -9,7 +9,7 @@
 #include "RTimpl/Core/Triangle.h"
 #include "RTimpl/Core/Sphere.h"
 #include "RTimpl/Render/PixelBuffer.h"
-#include "RTimpl/Utils/Color.h"
+#include "Utils/Color.h"
 #include "RTimpl/Render/Camera.h"
 #include <iostream>
 
@@ -17,7 +17,7 @@ int main() {
     const unsigned int width = 800;
     const unsigned int height = 600;
 
-    auto window = sf::RenderWindow{{width, height}, "CMake SFML Project"};
+    auto window = sf::RenderWindow{{width, height}, "FatRayTracer"};
     window.setFramerateLimit(144);
 
     // Pick a font
@@ -33,7 +33,6 @@ int main() {
     // FPS Counter variables
     sf::Clock clock;
     int framecount = 0; // Used to count the frames between two intervals
-    float updateInterval = 0.01f; // Time between FPS updates
     float elapsedTime = 0.0f; // Used to count the elapsed time from the last FPS print
 
     // Create a pixel buffer
@@ -255,7 +254,7 @@ int main() {
         framecount++;
         elapsedTime += clock.restart().asSeconds();
 
-        if (elapsedTime >= updateInterval) {
+        if (float updateInterval = 0.01f; elapsedTime >= updateInterval) {
             char buffer[10];
             snprintf(buffer, sizeof(buffer), "%.2f", framecount / updateInterval);
             // Format FPS with 2 decimal places                framecount = 0;
